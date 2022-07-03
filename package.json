@@ -1,0 +1,33 @@
+{
+  "name": "icu-demo",
+  "version": "1.0.0",
+  "description": "A demo system for the icu-connect package",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inn-tech/icu-connect-example-node.git"
+  },
+  "keywords": [
+    "icu",
+    "itl",
+    "face",
+    "age"
+  ],
+  "author": "T Beswick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inn-tech/icu-connect-example-node/issues"
+  },
+  "homepage": "https://github.com/inn-tech/icu-connect-example-node#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "icu-connect": "file:../icu-connect",
+    "websocket": "^1.0.34"
+  }
+}

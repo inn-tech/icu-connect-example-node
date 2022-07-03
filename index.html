@@ -1,0 +1,112 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="img-src 'self' http: data:; default-src 'self'; script-src 'self' "> -->
+
+    <link rel="stylesheet" href="./content/css/bootstrap.min.css" />
+
+
+    <script src="./content/js/jquery/jquery.min.js"></script>
+    <script src="./content/js/popper/umd/popper.min.js"></script>
+    <script src="./content/js/bootstrap/bootstrap.min.js"></script>
+
+    <style>
+        /* The sidebar menu */
+        .sidenav {
+          height: 100%; /* Full-height: remove this if you want "auto" height */
+          width: 50%; /* Set the width of the sidebar */
+          position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+          z-index: 1; /* Stay on top */
+          top: 0; /* Stay at the top */
+          left: 0;
+          background-color: #111; /* Black */
+          overflow-x: hidden; /* Disable horizontal scroll */
+          padding-top: 20px;
+        }
+        /* Style page content */
+        .main {
+          margin-left: 50%; /* Same as the width of the sidebar */
+          padding: 0px 10px;
+        }
+
+        /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+        @media screen and (max-height: 450px) {
+          .sidenav {padding-top: 15px;}
+          .sidenav a {font-size: 18px;}
+        }      
+
+        h1{
+          color: antiquewhite;          
+        }
+        h2{
+          font-size: 1.1em;    
+        }
+        td{
+          color: antiquewhite;
+        }
+    </style>
+
+    <title>ICU</title>
+    
+</head>
+
+<body>
+
+
+    <div class="container-fluid">
+
+    <div class="sidenav">  
+      <div style="padding: 15px;">
+        <h1>ICU</h1>
+        <div id="history-show">
+          <table class="table" id="history">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+
+      <div class="main">
+        <div style="padding: 20px;"></div>
+
+        <div class="row">
+          <div class="col-md">
+            <div class="stream">
+              <img id="icu-stream" width="320" height="320" src="./content/images/back.jpg" />
+            </div>
+          </div>
+          <div class="col-md">
+            <div id="result">
+              <img id="icu-result" width="320" height="320" />
+            </div>  
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md">
+            <div id="age-panel" style="padding: 20px;">
+            <h2 id="age-result"></h2>
+            <h2 id="id-result"></h2>
+            </div>
+          </div>
+          <div class="col-md">
+            <div id="db-panel">
+              <img id="img-database" width="320" height="320" />
+            </div>              
+          </div>
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+    <script src="./content/js/index.js"></script>
+
+</body>
+
+</html>
