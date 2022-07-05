@@ -7,6 +7,11 @@ const router = express.Router();
 app.use(express.static(__dirname + '/public'));
 var clients = {};
 
+var sys_state = {
+  'icu':'disconnected',
+  'session':false
+}
+
 
 const {run,icu,enroll,set_options} = require('icu-connect')
 run({
@@ -14,14 +19,43 @@ run({
   'ssl':true,
   'port':44345,
   'username':'apiuser',
-  'password':'apipassword'
+  'password':'apipassword',
+  'db_dir':__dirname,
+  'db_name':'icu.db'
 });
 
 icu.on('connected',function(data){
   console.log('device',data)
+  Object.keys(clients).forEach(key => {
+    var cmd = {
+      'cmd':'connected'
+    }
+    clients[key].send(JSON.stringify(cmd))    
+  });  
+  sys_state.icu = 'connected'    
 });
+
+icu.on('disconnected',function(){
+  console.log('device disconnected')
+  Object.keys(clients).forEach(key => {
+    var cmd = {
+      'cmd':'disconnected'
+    }
+    clients[key].send(JSON.stringify(cmd)) 
+  });  
+  sys_state.icu = 'disconnected'     
+})
+
 icu.on('device_state',function(data){
   console.log('state',data)
+  Object.keys(clients).forEach(key => {
+    var cmd = {
+      'cmd':'state',
+      'data':data.device_state
+    }
+    clients[key].send(JSON.stringify(cmd))
+  });    
+  sys_state.icu = data.device_state   
 })
 
 icu.on('sessionstart',function(){
@@ -30,8 +64,9 @@ icu.on('sessionstart',function(){
     var cmd = {
       'cmd':'start_session'
     }
-    clients[key].send(JSON.stringify(cmd))
+    clients[key].send(JSON.stringify(cmd))   
   });
+  sys_state.session = true   
 });
 icu.on('sessionend',function(){
   console.log('sessionend')  
@@ -39,8 +74,9 @@ icu.on('sessionend',function(){
     var cmd = {
       'cmd':'end_session'
     }
-    clients[key].send(JSON.stringify(cmd))
+    clients[key].send(JSON.stringify(cmd))  
   });
+  sys_state.session = false    
 }); 
 icu.on('age',function(data){
   console.log('age')
@@ -63,6 +99,24 @@ icu.on('uid',function(data){
     clients[key].send(JSON.stringify(cmd))
   });
 });
+
+
+icu.on('face_saved',function(data){
+  console.log('face_saved',data.uid)
+
+  Object.keys(clients).forEach(key => {
+    var cmd = {
+      'cmd':'enrolled',
+      'data':data
+    }
+    clients[key].send(JSON.stringify(cmd))
+  });
+
+  /*
+    Here you can access the saved adata fro an external database
+   */
+});
+
 
 
 const webSocketServer = require('websocket').server;
@@ -111,22 +165,15 @@ wsServer.on('request', function (request) {
   clients[userID] = connection;
   console.log('connected: ' + userID, Object.keys(clients).length)
 
+  // send a state update to new client on connection
+  var msg = {
+    'cmd':'init',
+    'data':sys_state
+  }
+  connection.send(JSON.stringify(msg))  
+
   connection.on('message', function (message) {
     console.log('msg', message)
-    if (message.type === 'utf8') {
-
-      // const clientRequest = JSON.parse(message.utf8Data)
-      // if(clientRequest.cmd == 'enroll'){
-      //     enrollData.push(clientRequest.data)
-      // }
-      // console.log('send')
-      // var msg = 'hello'
-      // connection.send(msg)
-
-    }
-    else if (message.type === 'binary') {
-      console.log('Received Binary Message of ' + message.binaryData.length + ' bytes');
-    }
   });
 
   connection.on('close', function (reasonCode, description) {
@@ -165,6 +212,6 @@ router.post('/',jsonParser,function(req,res){
 
 //add the router
 app.use('/', router);
-app.listen(process.env.port || 3000);
+app.listen(process.env.port || 3030);
 
-console.log('Running at Port 3000');
+console.log('Running at Port 3030');

@@ -107,9 +107,41 @@ $(document).ready(function () {
     connection.onmessage = (e) => {
         try {
 
-
-
         var msg = JSON.parse(e.data);
+
+        if(msg['cmd'] === 'init'){
+            console.log(msg)
+            if(msg['data'].icu == 'ready'){
+                if(msg['data'].session){
+                    inSession = true
+                    img_stream.src = 'http://192.168.137.8:8040/stream';   
+                }else{
+                    img_stream.src = './content/images/back.jpg';                     
+                }
+            }
+        }
+
+
+        if(msg['cmd']==='connected'){
+            img_stream.src = './content/images/connected.jpg';             
+        }
+        if(msg['cmd']==='state'){
+            if(msg['data'] == 'initialising'){
+                img_stream.src = './content/images/initImage.jpg';             
+            }
+            if(msg['cmd'] == 'ready'){
+                img_stream.src = './content/images/back.jpg';                  
+            }
+        }        
+        if(msg['cmd']==='disconnected'){
+            img_stream.src = './content/images/disconnected.jpg';             
+        }        
+
+
+        if(msg['cmd'] === 'enrolled'){
+            console.log(msg)
+            alert('face added to system ' + msg['data'].uid)
+        }
 
         if(inSession){
             if(msg['cmd'] === 'end_session'){
@@ -134,6 +166,7 @@ $(document).ready(function () {
                 age_panel.style.visibility = "visible"    
                 db_panel.style.visibility = "visible"  
                 id_text.innerHTML = 'ID known: ' + msg.data.uid
+              
                 
                 addHistory(msg)                   
             }
@@ -150,6 +183,7 @@ $(document).ready(function () {
                 age_panel.style.visibility = "visible"  
                 db_panel.style.visibility = "hidden"    
                 id_text.innerHTML = 'ID unknown'
+              
                 addHistory(msg)                
 
             }
