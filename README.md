@@ -12,7 +12,7 @@ An simple example face/age recognition system, using the Innovative Technology L
  <br />
 
 ## Useage
-The ICU™ device needs to be set up in Local API mode. The user can chose SSL (https) connection or http and enter a security username and password on the 'Running Mode' tab on the device Web Config page. For example: http://192.168.137.8:3000 if the device usb-ethernet connection us is being used.
+The ICU™ device needs to be set up in Local API mode. The user can chose SSL (https) connection or http and enter a security username and password on the 'Running Mode' tab on the device Web Config page. For example: http://192.168.137.8:3000 if the device usb-ethernet connection is being used.
 ```
 
 git clone https://github.com/inn-tech/icu-connect-example-node.git
